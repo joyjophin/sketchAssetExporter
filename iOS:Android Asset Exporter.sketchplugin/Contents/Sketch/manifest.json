@@ -1,0 +1,25 @@
+{
+  "author" : "Jophin Joy",
+  "icon" : "icon.png",
+  "commands" : [
+    {
+      "script" : "script.js",
+      "name" : "iOS/Android Asset Exporter",
+      "handler" : "beginExport",
+      "shortcut" : "cmd alt a",
+      "identifier" : "assetExporter"
+    }
+  ],
+  "menu" : {
+    "title" : "iOS/Android Asset Exporter",
+    "items" : [
+      "assetExporter"
+    ],
+    "isRoot": true
+  },
+  "identifier" : "com.techzclub.assetExporter",
+  "version" : "1.0",
+  "description" : "Export assets for Android and iOS in One-Click!",
+  "authorEmail" : "techzclub@gmail.com",
+  "name" : "iOS/Android Asset Exporter"
+}
