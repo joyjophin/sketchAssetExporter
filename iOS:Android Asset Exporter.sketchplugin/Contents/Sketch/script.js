@@ -3,6 +3,33 @@ function beginExport(context) {
 }
 
 var JJ = {};
+var pluginIdentifier = "com.techzclub.assetExporter";
+
+function getPreferences(key) {
+    var userDefaults = NSUserDefaults.standardUserDefaults();
+    if (!userDefaults.dictionaryForKey(pluginIdentifier)) {
+        var defaultPreferences = NSMutableDictionary.alloc().init();
+        defaultPreferences.setObject_forKey("value1", "key1");
+        defaultPreferences.setObject_forKey("value2", "key2");
+
+        userDefaults.setObject_forKey(defaultPreferences, pluginIdentifier);
+        userDefaults.synchronize();
+    }
+    return userDefaults.dictionaryForKey(pluginIdentifier).objectForKey(key);
+};
+
+function setPreferences(key, value) {
+    var userDefaults = NSUserDefaults.standardUserDefaults();
+    if (!userDefaults.dictionaryForKey(pluginIdentifier)) {
+        var preferences = NSMutableDictionary.alloc().init();
+    } else {
+        var preferences = NSMutableDictionary.dictionaryWithDictionary(userDefaults.dictionaryForKey(pluginIdentifier));
+    }
+    preferences.setObject_forKey(value, key);
+    userDefaults.setObject_forKey(preferences, pluginIdentifier);
+    userDefaults.synchronize();
+};
+
 JJ.assetExporter = {
 	documentMetadata: null,
 
@@ -117,8 +144,12 @@ JJ.UI = {
 		var panel = NSOpenPanel.openPanel(),
 			defaultPath,
 			path;
+			newPath = getPreferences("path");
 
-		if (context.document.fileURL()) {
+		if(newPath){
+			defaultPath = NSURL.URLWithString("file:/"+newPath);
+		}
+		else if (context.document.fileURL()) {
 			defaultPath = context.document.fileURL().URLByDeletingLastPathComponent();
 		} else {
 			defaultPath = NSURL.URLWithString("~/Desktop");
@@ -133,6 +164,7 @@ JJ.UI = {
 		if (panel.runModal() == NSOKButton) {
 			path = panel.URL().path();
 		}
+		setPreferences("path",path);
 
 		return path;
 	}
